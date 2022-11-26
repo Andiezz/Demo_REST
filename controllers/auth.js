@@ -2,7 +2,6 @@ const { validationResult } = require("express-validator")
 const bcrypt = require("bcryptjs")
 
 const User = require("../models/user")
-const { hash } = require("bcrypt")
 
 exports.signup = (req, res, next) => {
     const error = validationResult(req)
