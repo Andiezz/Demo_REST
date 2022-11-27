@@ -21,7 +21,7 @@ exports.getPosts = (req, res, next) => {
             res.status(200).json({
                 message: "Fetched post successfully.",
                 posts: posts,
-                totalItems: totalItems
+                totalItems: totalItems,
             })
         })
         .catch((err) => {
@@ -51,11 +51,11 @@ exports.createPost = (req, res, next) => {
         title: title,
         content: content,
         imageUrl: imageUrl,
-        creator: { name: "An" },
+        creator: req.userId,
     })
     post.save()
         .then((result) => {
-            console.log(result)
+            
             res.status(201).json({
                 message: "Post created successfully!",
                 post: result,
