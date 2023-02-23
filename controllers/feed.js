@@ -54,10 +54,10 @@ exports.createPost = async (req, res, next) => {
     creator: req.userId,
   });
   try {
-    let result = await post.save();
+    await post.save();
     const user = await User.findById(req.userId);
     user.posts.push(post);
-    result = await user.save();
+    const result = await user.save();
     io.getIO().emit('posts', {
       action: 'create',
       post: {
@@ -74,6 +74,7 @@ exports.createPost = async (req, res, next) => {
       post: post,
       creator: { _id: user._id, name: user.name },
     });
+    return result;
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -173,7 +174,7 @@ exports.deletePost = async (req, res, next) => {
 
     user.posts.pull(postId);
     result = await user.save();
-    io.getIO().emit('posts', { action: 'delete', post: postId })
+    io.getIO().emit('posts', { action: 'delete', post: postId });
     res.status(200).json({ message: 'Deleted post.' });
   } catch (err) {
     if (!err.statusCode) {
